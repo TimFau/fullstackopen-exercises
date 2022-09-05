@@ -1,0 +1,26 @@
+note over browser: 
+User enters 'note' value in 'input' element
+User clicks the 'submit' button to submit the form
+end note
+browser->server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note
+note right of browser: input value is included in payload as 'note'
+server->browser: empty response due to redirect
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/notes
+server->browser: HTML-code
+browser->server: GET https://studies.cs.helsinki.fi/exampleapp/main.css
+server->browser: main.css
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.js
+server->browser: main.js
+note over browser:
+Browser executes xhttp.open to to initialize the request for data.json
+Browser sends request with xhttp.send
+end note
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/data.json
+server-->browser: [...,{"content":"Test 8","date":"2022-09-04T23:59:35.511Z"}]
+note right of browser: Full response contains every note object, including the one that was just created
+note over browser:
+browser executes the onreadystatechange event
+browser renders the notes in the 'notes' element
+end note
+browser->server: HTTP GET https://studies.cs.helsinki.fi/favicon.ico
+server->browser: favicon.ico

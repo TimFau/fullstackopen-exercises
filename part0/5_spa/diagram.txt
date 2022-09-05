@@ -1,0 +1,18 @@
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/spa
+server->browser: HTML-code
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.css
+server->browser: main.css
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/spa.js
+server->browser: spa.js
+note over browser:
+Browser executes xhttp.open to to initialize the request for data.json
+Browser sends request with xhttp.send
+end note
+browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/data.json
+server-->browser: [...,{"content":"Test 8","date":"2022-09-04T23:59:35.511Z"}]
+note over browser:
+Browser receives response containing notes data 
+Browser renders the notes in the 'notes' element
+end note
+browser->server: HTTP GET https://studies.cs.helsinki.fi/favicon.ico
+server->browser: favicon.ico

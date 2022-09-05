@@ -1,0 +1,21 @@
+note over browser: 
+User enters 'note' value in 'input' element.
+User clicks the 'submit' button to submit the form.
+code from spa.js:
+- intercepts the form submit event.
+- puts 'note' input value into an object with a new date.
+- adds 'note' object to the 'notes' array.
+- triggers redrawNotes function to render updated notes data to the DOM.
+- triggers sendToServer to update json data.
+end note
+browser->server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+note right of browser: 
+input value is included in payload as 'content'.
+date is included in payload as 'date'.
+end note
+server-->browser: {"message":"note created"}
+note left of server:
+Server sends response to let us know that the note was created.
+This means that, if we refresh the page, data.json will contain the
+new note and it will still be rendered to the DOM on refresh.
+end note
