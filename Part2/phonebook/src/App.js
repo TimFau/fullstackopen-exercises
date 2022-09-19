@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
-import axios from 'axios'
 import { Filter } from './components/Filter'
 import { PersonForm } from './components/PersonForm'
 import { Persons } from './components/Persons'
+import personsService from './services/persons'
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -22,15 +22,17 @@ const App = () => {
     } else if (alreadyExists) {
       alert(`${newName} is already added to the phonebook`)
     } else {
-      setPersons(persons.concat({ name: newName, number: newNumber }))
+      let newPersonObject = {name: newName, number: newNumber}
+      personsService.createPerson(newPersonObject)
+      setPersons(persons.concat(newPersonObject))
       setNewName('')
       setNewNumber('')
     }
   }
 
   useEffect(() => {
-    axios
-      .get('http://localhost:3001/persons')
+    personsService
+      .getPersons()
       .then(response => {
         console.log('promise fulfilled', response.data)
         setPersons(response.data)

@@ -1,6 +1,6 @@
 const Person = ({name, number}) => <div>{name} {number}</div>
 
-export const Persons = ({persons, nameFilter}) => (
+export const Persons = ({persons = '', nameFilter}) => (
     persons.filter(
         person => person.name.toLowerCase().includes(nameFilter)
     ).map(
