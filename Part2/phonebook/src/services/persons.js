@@ -5,11 +5,19 @@ const getPersons = () => {
     return axios.get(baseUrl)
 }
 
-const createPerson = (newPerson) => {
-    return axios.post(baseUrl, newPerson)
+const createPerson = (person) => {
+    return axios.post(baseUrl, person)
 }
 
-export default {
-    getPersons,
-    createPerson
+const deletePerson = (id) => {
+    let url = baseUrl + '/' + id
+    return axios.delete(url)
 }
+
+const persons = {
+    getPersons,
+    createPerson,
+    deletePerson
+}
+
+export default persons

@@ -30,12 +30,25 @@ const App = () => {
     }
   }
 
+  const deletePerson = (event, name, id) => {
+    event.preventDefault()
+    let confirmMsg = `Delete ${name} ?`
+    let index = persons.map(person => person.id).indexOf(id)
+    let newPersonsArray = [...persons]
+    if (window.confirm(confirmMsg)) {
+        newPersonsArray.splice(index, 1)
+        personsService.deletePerson(id)
+        setPersons(newPersonsArray)
+    }
+  }
+
   useEffect(() => {
     personsService
       .getPersons()
       .then(response => {
         console.log('promise fulfilled', response.data)
         setPersons(response.data)
+        window.persons = response.data
       })
   }, [])
 
@@ -44,7 +57,7 @@ const App = () => {
       <h2>Phonebook</h2>
       <Filter nameFilter={nameFilter} handleNameFilterChange={handleNameFilterChange} />
 
-      <h2>Add a new</h2>
+      <h2>Add a new person</h2>
       <PersonForm 
         newName={newName}
         newNumber={newNumber}
@@ -54,7 +67,7 @@ const App = () => {
       />
 
       <h2>Numbers</h2>
-      <Persons persons={persons} nameFilter={nameFilter} />
+      <Persons persons={persons} nameFilter={nameFilter} deletePerson={deletePerson} />
     </div>
   )
 }
