@@ -9,10 +9,31 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [nameFilter, setNameFilter] = useState('')
+  const [message, setMessage] = useState(null)
+  const [messageType, setMessageType] = useState('')
 
   const handleNameChange = (event) => setNewName(event.target.value)
   const handleNumberChange = (event) => setNewNumber(event.target.value)
   const handleNameFilterChange = (event) => setNameFilter(event.target.value.toLowerCase())
+  const handleSetMessage = (msg, type) => {
+    setMessageType(type)
+    setMessage(msg)
+    setTimeout(() => {
+      setMessage(null)
+    }, 5000)
+  }
+
+  const Notification = ({msg, type}) => {
+    if (msg === null) {
+      return null
+    }
+
+    return (
+      <div className={`notification ${type}`}>
+        {msg}
+      </div>
+    )
+  }
 
   const addPerson = (event) => {
     event.preventDefault()
@@ -26,12 +47,16 @@ const App = () => {
       if (nameAlreadyExists && window.confirm(confirmChangeNumberMsg)) {
         const index = persons.map(person => person.name).indexOf(newName),
               id = persons[index].id
-        personsService.updatePerson(id, newPersonObject)
+        personsService.updatePerson(id, newPersonObject).catch(error => {
+          console.log('error', error)
+          handleSetMessage(`Information of ${newName} has already been removed from the server`, 'error')
+        })
         newPersonsArray[index].number = newNumber
       } else {
         personsService.createPerson(newPersonObject)
         newPersonObject.id = newPersonsArray[newPersonsArray.length - 1].id + 1
         newPersonsArray = newPersonsArray.concat(newPersonObject)
+        handleSetMessage(`${newName} was added`, 'success')
       }
       setPersons(newPersonsArray)
       setNewName('')
@@ -65,6 +90,8 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification msg={message} type={messageType} />
+
       <Filter nameFilter={nameFilter} handleNameFilterChange={handleNameFilterChange} />
 
       <h2>Add a new person</h2>
