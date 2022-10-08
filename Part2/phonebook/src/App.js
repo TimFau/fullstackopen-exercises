@@ -16,18 +16,28 @@ const App = () => {
 
   const addPerson = (event) => {
     event.preventDefault()
-    const alreadyExists = persons.find(person => person.name === newName) !== undefined
+    let newPersonsArray = [...persons],
+        newPersonObject = {name: newName, number: newNumber}
+    const nameAlreadyExists = persons.find(person => person.name === newName) !== undefined,
+          confirmChangeNumberMsg = `${newName} is already added to the phonebook, replace the older number with a new one?`
     if (!newName || !newNumber) {
       alert('Please enter a name and number')
-    } else if (alreadyExists) {
-      alert(`${newName} is already added to the phonebook`)
     } else {
-      let newPersonObject = {name: newName, number: newNumber}
-      personsService.createPerson(newPersonObject)
-      setPersons(persons.concat(newPersonObject))
+      if (nameAlreadyExists && window.confirm(confirmChangeNumberMsg)) {
+        const index = persons.map(person => person.name).indexOf(newName),
+              id = persons[index].id
+        personsService.updatePerson(id, newPersonObject)
+        newPersonsArray[index].number = newNumber
+      } else {
+        personsService.createPerson(newPersonObject)
+        newPersonObject.id = newPersonsArray[newPersonsArray.length - 1].id + 1
+        newPersonsArray = newPersonsArray.concat(newPersonObject)
+      }
+      setPersons(newPersonsArray)
       setNewName('')
       setNewNumber('')
     }
+    
   }
 
   const deletePerson = (event, name, id) => {

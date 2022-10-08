@@ -9,6 +9,11 @@ const createPerson = (person) => {
     return axios.post(baseUrl, person)
 }
 
+const updatePerson = (id, person) => {
+    let url = baseUrl + '/' + id
+    return axios.put(url, person)
+}
+
 const deletePerson = (id) => {
     let url = baseUrl + '/' + id
     return axios.delete(url)
@@ -17,6 +22,7 @@ const deletePerson = (id) => {
 const persons = {
     getPersons,
     createPerson,
+    updatePerson,
     deletePerson
 }
 
