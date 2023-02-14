@@ -53,14 +53,19 @@ const App = () => {
         })
         newPersonsArray[index].number = newNumber
       } else {
-        personsService.createPerson(newPersonObject)
-        newPersonObject.id = newPersonsArray[newPersonsArray.length - 1].id + 1
-        newPersonsArray = newPersonsArray.concat(newPersonObject)
-        handleSetMessage(`${newName} was added`, 'success')
+        personsService.createPerson(newPersonObject).then(createdPerson => {
+          // console.log('createdPerson', createdPerson)
+          newPersonObject.id = newPersonsArray[newPersonsArray.length - 1].id + 1
+          newPersonsArray = newPersonsArray.concat(newPersonObject)
+          handleSetMessage(`${newName} was added`, 'success')
+          setPersons(newPersonsArray)
+          setNewName('')
+          setNewNumber('')
+        }).catch(error => {
+          console.log(error)
+          handleSetMessage(error.response.data.error, 'error')
+        })
       }
-      setPersons(newPersonsArray)
-      setNewName('')
-      setNewNumber('')
     }
     
   }
