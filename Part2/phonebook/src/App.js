@@ -47,14 +47,15 @@ const App = () => {
       if (nameAlreadyExists && window.confirm(confirmChangeNumberMsg)) {
         const index = persons.map(person => person.name).indexOf(newName),
               id = persons[index].id
-        personsService.updatePerson(id, newPersonObject).catch(error => {
+        personsService.updatePerson(id, newPersonObject).then(updatedPerson => {
+          handleSetMessage(`${newName} was updated`, 'success')
+          newPersonsArray[index].number = newNumber
+        }).catch(error => {
           console.log('error', error)
-          handleSetMessage(`Information of ${newName} has already been removed from the server`, 'error')
+          handleSetMessage(error.response.data.error, 'error')
         })
-        newPersonsArray[index].number = newNumber
       } else {
         personsService.createPerson(newPersonObject).then(createdPerson => {
-          // console.log('createdPerson', createdPerson)
           newPersonObject.id = newPersonsArray[newPersonsArray.length - 1].id + 1
           newPersonsArray = newPersonsArray.concat(newPersonObject)
           handleSetMessage(`${newName} was added`, 'success')
